@@ -45,12 +45,14 @@ public class TitleUIController : MonoBehaviour {
         SESlider = GameObject.Find("SESlider").GetComponent<Slider>();
 	}
 
-    public void OnButtonClicked(ButtonType type)
+    public void OnButtonClicked(int type)
     {
-        switch (type)
+        switch ((ButtonType)type)
         {
+            //0
             case ButtonType.START:
-
+                FadeManager.Instance.LoadScene("Main",2.0f);
+                soundManager.FadeBGM("Plan8");
                 break;
             case ButtonType.EXPLAIN:
                 break;
@@ -75,6 +77,7 @@ public class TitleUIController : MonoBehaviour {
         this.soundVolume.BGMVolume = this.BGMSlider.value;
         this.soundVolume.SEVolume = this.SESlider.value;
         this.soundManager.volume = this.soundVolume;
+        this.soundManager.OnBGMVolumeChanged();
         Debug.Log("BGM : " + this.soundVolume.BGMVolume + "\nSE : " + this.soundVolume.SEVolume);
     }
 
