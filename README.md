@@ -1,2 +1,0 @@
-# OneTre_Master
-OneTreのMasterProjectFileを管理します
