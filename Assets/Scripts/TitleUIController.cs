@@ -3,16 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 
 
-public enum ButtonType
-{
-    START,
-    EXPLAIN,
-    OPTIONTOTITLE,
-}
 /*UI動作時の処理を記述します*/
 public class TitleUIController : MonoBehaviour {
     // Scene>TitleのCanvasを全て取得
-    Canvas TitleCanvas, OptionCanvas;
+    Canvas TitleCanvas, OptionCanvas,ExplanationCanvas;
 
 
     // TitleCanvas関連
@@ -33,6 +27,7 @@ public class TitleUIController : MonoBehaviour {
         // Canvas取得
         TitleCanvas = GameObject.Find("TitleCanvas").GetComponent<Canvas>();
         OptionCanvas = GameObject.Find("OptionCanvas").GetComponent<Canvas>();
+        ExplanationCanvas = GameObject.Find("ExplanationCanvas").GetComponent<Canvas>();
 
         //Title関連の参照を取得
         StartButton = GameObject.Find("StartButton").GetComponent<Button>();
@@ -47,17 +42,28 @@ public class TitleUIController : MonoBehaviour {
 
     public void OnButtonClicked(int type)
     {
-        switch ((ButtonType)type)
+        switch (type)
         {
-            //0
-            case ButtonType.START:
+            //Start
+            case 0:
                 FadeManager.Instance.LoadScene("Main",2.0f);
                 soundManager.FadeBGM("Plan8");
                 break;
-            case ButtonType.EXPLAIN:
-                break;
-            case ButtonType.OPTIONTOTITLE:
+            //option
+            case 1:
                 OptionCanvas.enabled = true;
+                break;
+            //Explanation
+            case 2:
+                ExplanationCanvas.enabled = true;
+                break;
+            //optionTotitle
+            case 3:
+                OptionCanvas.enabled = false; ;
+                break;
+            //4
+            case 4:
+                ExplanationCanvas.enabled = false;
                 break;
             default:
                 Debug.LogError("ButtonType not Attached!!");
