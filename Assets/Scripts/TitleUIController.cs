@@ -46,7 +46,7 @@ public class TitleUIController : MonoBehaviour {
         {
             //Start
             case 0:
-                FadeManager.Instance.LoadScene("Main",2.0f);
+                GameController.Instance.ToPlay();
                 soundManager.FadeBGM("Plan8");
                 break;
             //option
