@@ -26,6 +26,8 @@ public class Player : MonoBehaviour {
     // 左右に移動中かどうか
     private bool isMoving;
 
+    public float pos = 0;
+
 
     private Animator playerAnim;
     private Transform parentTransform;
@@ -51,6 +53,8 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        if (GameManager.GameSceneProp != GameScene.PLAY)
+            return;
 
         MoveVertical();
 
@@ -112,6 +116,7 @@ public class Player : MonoBehaviour {
         Vector3 dir = Vector3.zero;
         dir.z = VerticalSpeed;
         parentTransform.position += dir * Time.deltaTime;
+        pos += VerticalSpeed * Time.deltaTime;
     }
 
     private void MoveHorizontal(float dir)
