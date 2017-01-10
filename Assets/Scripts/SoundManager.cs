@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System;
+using System.Collections;
 
 [System.Serializable]
 public class SoundVolume
@@ -23,7 +23,7 @@ public class SoundSource
 {
     public AudioClip clip;
     public string Name;
-
+    
     public bool FadeFlag = false;
     public float m_VolumeBefore = 0.0f;
     public float m_VolumeAfter = 0.0f;
@@ -43,12 +43,16 @@ public class SoundManager : Singleton<SoundManager>
 
     public SoundSource[] BGMs;
     public SoundSource[] SEs;
+    void Awake()
+    {
+        DontDestroyOnLoad(SoundManager.Instance);
+    }
 
     void Start ()
     {
         BGMSource = gameObject.AddComponent<AudioSource>();
         BGMSource.loop = false;
-	
+        PlayBGM("Aublia");
 	}
 
     void Update ()
@@ -57,23 +61,21 @@ public class SoundManager : Singleton<SoundManager>
         {
             if (BGMs[i].FadeFlag == true && BGMs[i].m_FadeTime >= 0.0f)
             {
-                BGMs[i].m_Volume += (BGMs[i].m_VolumeAfter - BGMs[i].m_VolumeBefore) / BGMs[i].m_FadeTime / 60.0f;
+                BGMs[i].m_Volume -= volume.BGMVolume / BGMs[i].m_FadeTime / 60.0f;
                 BGMSource.volume = BGMs[i].m_Volume;
+                Debug.Log(BGMSource.volume);
 
-                if (BGMs[i].m_Volume >= 0.0f)
+                if (BGMs[i].m_Volume <= 0)
                 {
-                    BGMs[i].m_Volume = 1.0f;
-                    BGMs[i].m_FadeTime = 0.0f;
-                }
-                else if (BGMs[i].m_Volume <= 0.0f)
-                {
-                    BGMs[i].m_Volume = 0.0f;
-                    BGMs[i].m_FadeTime = 0.0f;
                     BGMSource.Stop();
                 }
             }
         }
-	}
+    }
+    public void OnBGMVolumeChanged()
+    {
+        if (BGMSource.volume != volume.BGMVolume) BGMSource.volume = volume.BGMVolume;
+    }
 
     public void StopBGM(string name)
     {
@@ -89,6 +91,40 @@ public class SoundManager : Singleton<SoundManager>
 
     }
 
+    // Fade再生する
+    public void FadeBGM(string name)
+    {
+        int i = 0;
+        for (i = 0; i < BGMs.Length; i++)
+        {
+            if (BGMs[i].Name.Equals(name))
+            {
+                break;
+            }
+        }
+        StartCoroutine("Fade",BGMs[i]);
+    }
+
+    IEnumerator Fade(SoundSource bgm)
+    {
+        while (BGMSource.volume > 0)
+        {
+           BGMSource.volume -= volume.BGMVolume / bgm.m_FadeTime / 60.0f;
+            yield return new WaitForEndOfFrame();
+        }
+        BGMSource.Stop();
+        BGMSource.volume = 0.0f;
+        BGMSource.clip = bgm.clip;
+        BGMSource.Play();
+        while (BGMSource.volume < volume.BGMVolume)
+        {
+            BGMSource.volume += volume.BGMVolume / bgm.m_FadeTime / 60.0f;
+            yield return new WaitForEndOfFrame();
+        }
+        BGMSource.volume = volume.BGMVolume;
+        yield return 0;
+    }
+
     public void FadeOutBGM(string name)
     {
 
@@ -99,7 +135,6 @@ public class SoundManager : Singleton<SoundManager>
                 ss.FadeFlag = true;
             }
         }
-
     }
 
     public void PlayBGM(string name)
