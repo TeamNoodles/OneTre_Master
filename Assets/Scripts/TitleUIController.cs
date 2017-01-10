@@ -3,16 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 
 
-public enum ButtonType
-{
-    START,
-    EXPLAIN,
-    OPTIONTOTITLE,
-}
 /*UI動作時の処理を記述します*/
 public class TitleUIController : MonoBehaviour {
     // Scene>TitleのCanvasを全て取得
-    Canvas TitleCanvas, OptionCanvas;
+    Canvas TitleCanvas, OptionCanvas,ExplanationCanvas;
 
 
     // TitleCanvas関連
@@ -33,6 +27,7 @@ public class TitleUIController : MonoBehaviour {
         // Canvas取得
         TitleCanvas = GameObject.Find("TitleCanvas").GetComponent<Canvas>();
         OptionCanvas = GameObject.Find("OptionCanvas").GetComponent<Canvas>();
+        ExplanationCanvas = GameObject.Find("ExplanationCanvas").GetComponent<Canvas>();
 
         //Title関連の参照を取得
         StartButton = GameObject.Find("StartButton").GetComponent<Button>();
@@ -45,17 +40,30 @@ public class TitleUIController : MonoBehaviour {
         SESlider = GameObject.Find("SESlider").GetComponent<Slider>();
 	}
 
-    public void OnButtonClicked(ButtonType type)
+    public void OnButtonClicked(int type)
     {
         switch (type)
         {
-            case ButtonType.START:
-
+            //Start
+            case 0:
+                FadeManager.Instance.LoadScene("Main",2.0f);
+                soundManager.FadeBGM("Plan8");
                 break;
-            case ButtonType.EXPLAIN:
-                break;
-            case ButtonType.OPTIONTOTITLE:
+            //option
+            case 1:
                 OptionCanvas.enabled = true;
+                break;
+            //Explanation
+            case 2:
+                ExplanationCanvas.enabled = true;
+                break;
+            //optionTotitle
+            case 3:
+                OptionCanvas.enabled = false; ;
+                break;
+            //4
+            case 4:
+                ExplanationCanvas.enabled = false;
                 break;
             default:
                 Debug.LogError("ButtonType not Attached!!");
@@ -75,6 +83,7 @@ public class TitleUIController : MonoBehaviour {
         this.soundVolume.BGMVolume = this.BGMSlider.value;
         this.soundVolume.SEVolume = this.SESlider.value;
         this.soundManager.volume = this.soundVolume;
+        this.soundManager.OnBGMVolumeChanged();
         Debug.Log("BGM : " + this.soundVolume.BGMVolume + "\nSE : " + this.soundVolume.SEVolume);
     }
 
