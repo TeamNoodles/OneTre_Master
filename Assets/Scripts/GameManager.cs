@@ -6,6 +6,7 @@ public enum GameScene
 {
     TITLE,
     GUIDE,
+    RENDERING,
     PLAY,
     PAUSE,
     RESULT1,
@@ -24,7 +25,7 @@ public enum GameState
 public class GameManager : Singleton<GameManager> {
 
     
-    private static GameState gameState;
+    private GameState gameState;
     private static GameScene gameScene;
     public static float pos;
 
