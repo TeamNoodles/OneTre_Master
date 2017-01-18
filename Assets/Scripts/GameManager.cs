@@ -13,25 +13,19 @@ public enum GameScene
     RESULT2,
 }
 
-public enum Player1GameState
+public enum GameState
 {
     EASY,
     NORMAL,
     HARD,        
 }
 
-public enum Player2GameState
-{
-    EASY,
-    NORMAL,
-    HARD,
-}
+
 // GameManagerはシングルトンで実装する
 public class GameManager : Singleton<GameManager> {
 
     
-    private Player1GameState gameState1 = Player1GameState.EASY;
-    private Player2GameState gameState2 = Player2GameState.EASY;
+    private GameState gameState = GameState.EASY;
     private GameScene gameScene;
     private GameObject player1;
     private GameObject player2;
@@ -79,61 +73,50 @@ public class GameManager : Singleton<GameManager> {
        
     }
 
-    public  Player1GameState GameStateProp1
+    public  GameState GameStateProp1
     {
         get
         {
-            return gameState1;
+            return gameState;
         }
         set
         {
-            gameState1 = value;
+            gameState = value;
         }
 
     }
 
-    public Player2GameState GameStateProp2
-    {
-        get
-        {
-            return gameState2;
-        }
-        set
-        {
-            gameState2 = value;
-        }
-
-    }
+   
 
     public void StateSwitch1(float player1_pos)//ステート変更
     {
 
-        switch (gameState1)
+        switch (gameState)
         {
-            case Player1GameState.EASY:
+            case GameState.EASY:
                 if (player1_pos == 120.01f)
-                    gameState1 = Player1GameState.NORMAL;
+                    gameState = GameState.NORMAL;
                 break;
 
-            case Player1GameState.NORMAL:
+            case GameState.NORMAL:
                 if (player1_pos == 240.01f)
-                    gameState1 = Player1GameState.HARD;
+                    gameState = GameState.HARD;
                 break;
         }
     }
 
     public void StateSwitch2(float player2_pos)
     {
-        switch (gameState2)
+        switch (gameState)
         {
-            case Player2GameState.EASY:
+            case GameState.EASY:
                 if (player2_pos == 120.01f)
-                    gameState2 = Player2GameState.NORMAL;
+                    gameState= GameState.NORMAL;
                 break;
 
-            case Player2GameState.NORMAL:
+            case GameState.NORMAL:
                 if (player2_pos == 240.01f)
-                    gameState2 = Player2GameState.HARD;
+                    gameState = GameState.HARD;
                 break;
         }
 
