@@ -53,7 +53,7 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (GameManager.GameSceneProp != GameScene.PLAY)
+        if (GameManager.Instance.GameSceneProp != GameScene.PLAY)
             return;
 
         MoveVertical();
