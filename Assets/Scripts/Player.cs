@@ -10,10 +10,11 @@ public enum PlayerState
     SLIDING,
     MOVING
 }
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 
     private PlayerState pState = PlayerState.NORMAL;
-    
+
     [SerializeField]
     // 1p,2pのキーバインドを設定する
     private string Upkey, LeftKey, DownKey, RightKey;
@@ -25,17 +26,18 @@ public class Player : MonoBehaviour {
     public float LaneInterval;
     // 左右に移動中かどうか
     private bool isMoving;
-
-    public float pos = 0;
+    //現在の位置
+    public float playerpos = 0;
 
 
     private Animator playerAnim;
     private Transform parentTransform;
 
-    [SerializeField,Range(0,4)]
+    [SerializeField, Range(0, 4)]
     private byte CurrentLane;
     [SerializeField]
     private byte LaneNum; // レーンの本数
+
 
     void Awake()
     {
@@ -43,46 +45,50 @@ public class Player : MonoBehaviour {
         parentTransform = this.transform.parent;
         isMoving = false;
         LaneNum = 5;
-        CurrentLane = (byte)(LaneNum / 2); 
+        CurrentLane = (byte)(LaneNum / 2);
     }
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    // Use this for initialization
+    void Start()
     {
-        if (GameManager.GameSceneProp != GameScene.PLAY)
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (GameManager.Instance.GameSceneProp != GameScene.PLAY)
+        {
             return;
 
-        MoveVertical();
+            MoveVertical();
 
 
-        if (pState == PlayerState.NORMAL)
-        {
-            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), Upkey)))
+            if (pState == PlayerState.NORMAL)
             {
-                OnJumping();
-            }
-            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), RightKey)))
-            {
-                if (this.CurrentLane < this.LaneNum - 1 && !isMoving)
+                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), Upkey)))
                 {
-                    CurrentLane++;
-                    MoveHorizontal(1);
+                    OnJumping();
                 }
-            }
-            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), DownKey)))
-            {
-                OnSliding();
-            }
-            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), LeftKey)))
-            {
-                if (this.CurrentLane > 0 && !isMoving)
+                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), RightKey)))
                 {
-                    CurrentLane--;
-                    MoveHorizontal(-1);
+                    if (this.CurrentLane < this.LaneNum - 1 && !isMoving)
+                    {
+                        CurrentLane++;
+                        MoveHorizontal(1);
+                    }
+                }
+                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), DownKey)))
+                {
+                    OnSliding();
+                }
+                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), LeftKey)))
+                {
+                    if (this.CurrentLane > 0 && !isMoving)
+                    {
+                        CurrentLane--;
+                        MoveHorizontal(-1);
+                    }
                 }
             }
         }
@@ -90,15 +96,15 @@ public class Player : MonoBehaviour {
     private void OnJumping()
     {
         pState = PlayerState.JUMP;
-        if (!playerAnim.GetBool("isJumping")) 
-            this.playerAnim.SetBool("isJumping", true);
+        //if (!playerAnim.GetBool("isJumping"))
+        //    this.playerAnim.SetBool("isJumping", true);
     }
 
     private void OnSliding()
     {
         pState = PlayerState.SLIDING;
-        if (!playerAnim.GetBool("isSliding"))
-            this.playerAnim.SetBool("isSliding", true);
+        //if (!playerAnim.GetBool("isSliding"))
+        //    this.playerAnim.SetBool("isSliding", true);
     }
 
     /// <summary>
@@ -107,29 +113,27 @@ public class Player : MonoBehaviour {
     /// <param name="triggerName"></param>
     private void OnAnimationEnd(string triggerName)
     {
-        this.playerAnim.SetBool(triggerName, false);
+        //this.playerAnim.SetBool(triggerName, false);
         pState = PlayerState.NORMAL;
     }
 
     private void MoveVertical()
     {
-        Vector3 dir = Vector3.zero;
-        dir.z = VerticalSpeed;
-        parentTransform.position += dir * Time.deltaTime;
-        pos += VerticalSpeed * Time.deltaTime;
+       
+        playerpos += VerticalSpeed * Time.deltaTime;
     }
 
     private void MoveHorizontal(float dir)
     {
         pState = PlayerState.MOVING;
         this.isMoving = true;
-        StartCoroutine("ChangeLane",dir);
+        StartCoroutine("ChangeLane", dir);
     }
 
     IEnumerator ChangeLane(float dir)
     {
         float initPosX = this.parentTransform.position.x;
-        Vector3 target = new Vector3(this.LaneInterval*dir + initPosX, 0.0f, 0.0f);
+        Vector3 target = new Vector3(this.LaneInterval * dir + initPosX, 0.0f, 0.0f);
         while (isMoving)
         {
             target.z = parentTransform.position.z;
@@ -145,5 +149,5 @@ public class Player : MonoBehaviour {
         yield return 0;
     }
 
-    public byte LaneNumProp{ get { return LaneNum; } }
+    public byte LaneNumProp { get { return LaneNum; } }
 }
