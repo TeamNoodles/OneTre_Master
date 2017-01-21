@@ -31,7 +31,7 @@ public class Spawner : MonoBehaviour {
     {
         switch (Random.Range(0,Obstacles.Length))
         {
-
+            
         }
     }
 }
