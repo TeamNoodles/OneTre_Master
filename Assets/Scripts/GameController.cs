@@ -5,27 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class GameController : Singleton<GameController>
 {
-   
-    public GameObject player1;
-    public GameObject player2;
-    public Player player1Sc;
-    public Player player2Sc;
+
     bool isPlayer1Clear;
     bool isPlayer2Clear;
 
 
-    public void ToPlay()
+    public void ToPlay()//プレイ画面へ移行
     {
 
-        if (GameManager.GameSceneProp == GameScene.TITLE)
+        if (GameManager.Instance.GameSceneProp == GameScene.TITLE)
         {
-            GameManager.GameSceneProp = GameScene.PLAY;
+            GameManager.Instance.GameSceneProp = GameScene.PLAY;
             FadeManager.Instance.LoadScene("Main", 1);
         }
             
-        if (GameManager.GameSceneProp == GameScene.PAUSE)
+        if (GameManager.Instance.GameSceneProp == GameScene.PAUSE)
         {
-            GameManager.GameSceneProp = GameScene.PLAY;
+            GameManager.Instance.GameSceneProp = GameScene.PLAY;
             Time.timeScale = 1.0f;
 
         }
@@ -33,46 +29,46 @@ public class GameController : Singleton<GameController>
     }
 
 
-    public void ToGuide()
+    public  void ToGuide()//操作説明画面へ移行
     {
-        GameManager.GameSceneProp = GameScene.GUIDE;
+        GameManager.Instance.GameSceneProp = GameScene.GUIDE;
     }
 
-    public void ToTitle()
+    public void ToTitle()//タイトル画面へ移行
     {
-        GameManager.GameSceneProp = GameScene.TITLE;
+        GameManager.Instance.GameSceneProp = GameScene.TITLE;
         FadeManager.Instance.LoadScene("Title", 1);
     }
 
            
 
-    public void ToPause()
+    public void ToPause()//ポーズ画面へ移行
     {
-        GameManager.GameSceneProp = GameScene.PAUSE;
+        GameManager.Instance.GameSceneProp = GameScene.PAUSE;
         Time.timeScale = 0.0f;
     }
 
-    public void ToRESULT1()
+    public void ToRESULT1()//プレーヤー2のリザルト画面へ移行
     {
         if (isPlayer1Clear)
         {
-            GameManager.GameSceneProp = GameScene.RESULT1;
+            GameManager.Instance.GameSceneProp = GameScene.RESULT1;
             FadeManager.Instance.LoadScene("RESULT1", 1);
         }
     }
 
-    public void ToRESULT2()
+    public void ToRESULT2()//プレイヤー2のリザルト画面へ移行
     {
         if (isPlayer2Clear)
         {
-            GameManager.GameSceneProp = GameScene.RESULT2;
+            GameManager.Instance.GameSceneProp = GameScene.RESULT2;
             FadeManager.Instance.LoadScene("RESULT2", 1);
         }            
     }
 
-    public void Retry()
+    public void Retry()//再び最初からプレイするときプレイ画面へ移行
     {
-        GameManager.GameSceneProp = GameScene.PLAY;
+        GameManager.Instance.GameSceneProp = GameScene.PLAY;
         FadeManager.Instance.LoadScene("Main",2);       
     }
 
@@ -87,43 +83,24 @@ public class GameController : Singleton<GameController>
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public void ClearJudge()
+    public void ClearJudge()//クリア判定
     {
-        if(player1Sc.pos <= 500 && player2Sc.pos >= 500)
+        if(GameManager.Instance.Player1Prop.playerpos <= 500 && GameManager.Instance.Player2Prop.playerpos >= 500)//残り500mの時点でプレイヤー1が先行していたら
         {
             isPlayer1Clear = true;
         }
 
-        if (player2Sc.pos <= 500 && player1Sc.pos >= 500)
+        if (GameManager.Instance.Player2Prop.playerpos <= 500 && GameManager.Instance.Player1Prop.playerpos >= 500)//残り500mの時点でプレイヤー2が先行していたら
         {
             isPlayer2Clear = true;
         }
 
     }
 
-    public static void CallStateSwitch()
-    {
-        GameManager gm = new GameManager();
-
-        if (GameManager.pos == 120.01)
-        {
-            gm.StateSwitch(120.01f);
-        }
-        
-
-        if (GameManager.pos == 240.01)
-        {
-            gm.StateSwitch(240.01f);
-        }
-       
-    }
-
-    
+      
     // Use this for initialization
     void Start ()
-    {
-        player1Sc = player1.GetComponent<Player>();
-        player2Sc = player2.GetComponent<Player>();
+    {      
         isPlayer1Clear = false;
         isPlayer2Clear = false;
     }
