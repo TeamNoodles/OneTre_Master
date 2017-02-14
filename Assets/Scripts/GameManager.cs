@@ -13,19 +13,14 @@ public enum GameScene
     RESULT2,
 }
 
-public enum GameState
-{
-    EASY,
-    NORMAL,
-    HARD,        
-}
+
 
 
 // GameManagerはシングルトンで実装する
 public class GameManager : Singleton<GameManager> {
 
     
-    private GameState gameState = GameState.EASY;
+   
     private GameScene gameScene;
     private GameObject player1;
     private GameObject player2;
@@ -72,56 +67,6 @@ public class GameManager : Singleton<GameManager> {
         }
        
     }
-
-    public  GameState GameStateProp1
-    {
-        get
-        {
-            return gameState;
-        }
-        set
-        {
-            gameState = value;
-        }
-
-    }
-
-   
-
-    public void StateSwitch1(float player1_pos)//ステート変更
-    {
-
-        switch (gameState)
-        {
-            case GameState.EASY:
-                if (player1_pos == 120.01f)
-                    gameState = GameState.NORMAL;
-                break;
-
-            case GameState.NORMAL:
-                if (player1_pos == 240.01f)
-                    gameState = GameState.HARD;
-                break;
-        }
-    }
-
-    public void StateSwitch2(float player2_pos)
-    {
-        switch (gameState)
-        {
-            case GameState.EASY:
-                if (player2_pos == 120.01f)
-                    gameState= GameState.NORMAL;
-                break;
-
-            case GameState.NORMAL:
-                if (player2_pos == 240.01f)
-                    gameState = GameState.HARD;
-                break;
-        }
-
-    }
-      
     
 
     // Use this for initialization
