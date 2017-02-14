@@ -85,45 +85,19 @@ public class GameController : Singleton<GameController>
 
     public void ClearJudge()//クリア判定
     {
-        if(GameManager.Instance.Player1Prop.pos <= 500 && GameManager.Instance.Player2Prop.pos >= 500)//残り500mの時点でプレイヤー1が先行していたら
+        if(GameManager.Instance.Player1Prop.playerpos <= 500 && GameManager.Instance.Player2Prop.playerpos >= 500)//残り500mの時点でプレイヤー1が先行していたら
         {
             isPlayer1Clear = true;
         }
 
-        if (GameManager.Instance.Player2Prop.pos <= 500 && GameManager.Instance.Player1Prop.pos >= 500)//残り500mの時点でプレイヤー2が先行していたら
+        if (GameManager.Instance.Player2Prop.playerpos <= 500 && GameManager.Instance.Player1Prop.playerpos >= 500)//残り500mの時点でプレイヤー2が先行していたら
         {
             isPlayer2Clear = true;
         }
 
     }
 
-    public  void CallStateSwitch()//ステート変更の呼び出し
-    {
-        
-        if (GameManager.Instance.Player1Prop.pos == 120.01)
-        {
-           GameManager.Instance.StateSwitch1(120.01f);
-        }
-        
-
-        if (GameManager.Instance.Player1Prop.pos == 240.01)
-        {
-            GameManager.Instance.StateSwitch1(240.01f);
-        }
-
-        if(GameManager.Instance.Player2Prop.pos == 120.01)
-        {
-            GameManager.Instance.StateSwitch2(120.01f);
-        }
-
-        if (GameManager.Instance.Player2Prop.pos == 240.01)
-        {
-            GameManager.Instance.StateSwitch2(240.01f);
-        }
-
-    }
-
-    
+      
     // Use this for initialization
     void Start ()
     {      
