@@ -18,43 +18,9 @@ public enum GameScene
 
 // GameManagerはシングルトンで実装する
 public class GameManager : Singleton<GameManager> {
-
-    
    
     private GameScene gameScene;
-    private GameObject player1;
-    private GameObject player2;
-    private Player player1Sc;
-    private Player player2Sc;
-
-    
-
-    public Player Player1Prop
-    {
-        get
-        {
-            return player1Sc;
-        }
-
-        set
-        {
-            player1Sc = value;
-        }
-    }
-
-    public Player Player2Prop
-    {
-        get
-        {
-            return player2Sc;
-        }
-
-        set
-        {
-            player2Sc = value;
-        }
-    }
-
+   
     public  GameScene GameSceneProp
     {
         get
@@ -69,14 +35,10 @@ public class GameManager : Singleton<GameManager> {
     }
     
 
+
     // Use this for initialization
     void Start () {
-
-        player1 = GameObject.FindWithTag("Player1");
-        player2 = GameObject.FindWithTag("Player2");
-        player1Sc = player1.GetComponent<Player>();
-        player2Sc = player2.GetComponent<Player>();
-
+        
     }
 
     // Update is called once per frame

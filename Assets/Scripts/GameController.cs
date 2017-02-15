@@ -5,7 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameController : Singleton<GameController>
 {
-
+    private GameObject player1;
+    private GameObject player2;
+    private Player player1Sc;
+    private Player player2Sc;
     bool isPlayer1Clear;
     bool isPlayer2Clear;
 
@@ -17,8 +20,9 @@ public class GameController : Singleton<GameController>
         {
             GameManager.Instance.GameSceneProp = GameScene.PLAY;
             FadeManager.Instance.LoadScene("Main", 1);
-        }
             
+        }
+
         if (GameManager.Instance.GameSceneProp == GameScene.PAUSE)
         {
             GameManager.Instance.GameSceneProp = GameScene.PLAY;
@@ -85,19 +89,32 @@ public class GameController : Singleton<GameController>
 
     public void ClearJudge()//クリア判定
     {
-        if(GameManager.Instance.Player1Prop.playerpos <= 500 && GameManager.Instance.Player2Prop.playerpos >= 500)//残り500mの時点でプレイヤー1が先行していたら
+        if(player1Sc.playerpos <= 500 && player2Sc.playerpos >= 500)//残り500mの時点でプレイヤー1が先行していたら
         {
             isPlayer1Clear = true;
         }
 
-        if (GameManager.Instance.Player2Prop.playerpos <= 500 && GameManager.Instance.Player1Prop.playerpos >= 500)//残り500mの時点でプレイヤー2が先行していたら
+        if (player2Sc.playerpos <= 500 && player1Sc.playerpos >= 500)//残り500mの時点でプレイヤー2が先行していたら
         {
             isPlayer2Clear = true;
         }
 
     }
 
-      
+    public void Acquisition()//プレイヤー取得
+    {
+        if (GameManager.Instance.GameSceneProp == GameScene.PLAY)
+        {            
+            player1 = GameObject.FindWithTag("Player1");
+            player2 = GameObject.FindWithTag("Player2");
+            player1Sc = player1.GetComponent<Player>();
+            player2Sc = player2.GetComponent<Player>();
+
+        }
+
+    }
+
+
     // Use this for initialization
     void Start ()
     {      
