@@ -2,44 +2,92 @@
 using System.Collections;
 using System;
 
-public class Emitter : MonoBehaviour {
+public class Emitter : MonoBehaviour
+{
 
     public GameObject[] waves;
+    public GameObject Obstacle_Up;
+    public GameObject Obstacle_Down;
+    [SerializeField]
+    private Player TargetPlayer;
+    private GameManager GameState;
 
     //private int currentWave;
 
     // Use this for initialization
-    IEnumerator Start() {
+    void Start()
+    {
+        transform.position = new Vector3(TargetPlayer.transform.position.x, TargetPlayer.transform.position.y, TargetPlayer.transform.position.z + 3);
+    }
+
+    void Update()
+    {
+
+    }
+
+    IEnumerator Spawn()
+    {
 
         int seed = Environment.TickCount;
 
-        if (waves.Length == 0){
+        /*if (waves.Length == 0) {
             yield break;
-        }
+        }*/
 
-        while (true)
+
+        //while(進んだ距離が０～１２０００){
+        System.Random cRandom = new System.Random(seed++);
+        int firstselect = cRandom.Next(9);
+        if (firstselect <= 2)
         {
-            System.Random cRandom = new System.Random(seed++);
-            int currentWave = cRandom.Next(9);
+            //ビーム撃つ
+        }
+        else
+        {
+            int secondselect = cRandom.Next(9);
 
-            GameObject wave = (GameObject)Instantiate(waves[currentWave], transform.position, Quaternion.identity);
-            wave.transform.parent = transform;
-
-            // Waveの子要素のEnemyが全て削除されるまで待機する
-            while (wave.transform.childCount != 0)
+            if (secondselect <= 2)  //上障生成
             {
-                yield return new WaitForEndOfFrame();
+                Instantiate(Obstacle_Up, this.transform.position, Obstacle_Up.transform.rotation);
+                Obstacle_Up.transform.parent = transform;
+                while (Obstacle_Up.transform.childCount != 0)
+                {
+                    yield return new WaitForEndOfFrame();
+                    if (TargetPlayer.transform.position.z - Obstacle_Up.transform.position.z == -20)
+                    {
+                        Destroy(Obstacle_Up);
+                    }
+                }
             }
-            Destroy(wave);
-            Debug.Log("a");
-
-
-            if (waves.Length <= ++currentWave)
+            else if (3 <= secondselect && secondselect <= 4) //下障生成
             {
-                currentWave = 0;
+                Instantiate(Obstacle_Down, this.transform.position, Obstacle_Down.transform.rotation);
+                Obstacle_Down.transform.parent = transform;
+                while (Obstacle_Down.transform.childCount != 0)
+                {
+                    yield return new WaitForEndOfFrame();
+                    if (TargetPlayer.transform.position.z - Obstacle_Down.transform.position.z == -20)
+                    {
+                        Destroy(Obstacle_Down);
+                    }
+                }
             }
-            // Update is called once per frame
+            else //球生成
+            {
+                int currentWave = cRandom.Next(9);
 
+                GameObject wave = (GameObject)Instantiate(waves[currentWave], this.transform.position, Quaternion.identity);
+                wave.transform.parent = transform;
+                while (wave.transform.childCount != 0)
+                {
+                    yield return new WaitForEndOfFrame();
+                    if (TargetPlayer.transform.position.z - wave.transform.position.z == -20)
+                    {
+                        Destroy(wave);
+                    }
+                }
+            }
         }
     }
 }
+

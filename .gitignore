@@ -29,3 +29,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Assets/Scenes/Main.unity
+*.unity
