@@ -57,38 +57,34 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.GameSceneProp != GameScene.PLAY)
+        if (GameManager.Instance.GameSceneProp != GameScene.PLAY) return;
+
+        MoveVertical();
+
+        if (pState == PlayerState.NORMAL)
         {
-            return;
-
-            MoveVertical();
-
-
-            if (pState == PlayerState.NORMAL)
+            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), Upkey)))
             {
-                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), Upkey)))
+                OnJumping();
+            }
+            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), RightKey)))
+            {
+                if (this.CurrentLane < this.LaneNum - 1 && !isMoving)
                 {
-                    OnJumping();
+                    CurrentLane++;
+                    MoveHorizontal(1);
                 }
-                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), RightKey)))
+            }
+            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), DownKey)))
+            {
+                OnSliding();
+            }
+            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), LeftKey)))
+            {
+                if (this.CurrentLane > 0 && !isMoving)
                 {
-                    if (this.CurrentLane < this.LaneNum - 1 && !isMoving)
-                    {
-                        CurrentLane++;
-                        MoveHorizontal(1);
-                    }
-                }
-                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), DownKey)))
-                {
-                    OnSliding();
-                }
-                if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), LeftKey)))
-                {
-                    if (this.CurrentLane > 0 && !isMoving)
-                    {
-                        CurrentLane--;
-                        MoveHorizontal(-1);
-                    }
+                    CurrentLane--;
+                    MoveHorizontal(-1);
                 }
             }
         }
