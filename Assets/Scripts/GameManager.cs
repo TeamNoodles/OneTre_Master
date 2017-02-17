@@ -71,12 +71,12 @@ public class GameManager : Singleton<GameManager> {
 
     // Use this for initialization
     void Start () {
-
+        /*
         player1 = GameObject.FindWithTag("Player1");
         player2 = GameObject.FindWithTag("Player2");
         player1Sc = player1.GetComponent<Player>();
         player2Sc = player2.GetComponent<Player>();
-
+        */
     }
 
     // Update is called once per frame
